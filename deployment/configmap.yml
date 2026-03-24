@@ -7,7 +7,10 @@ data:
   PORT: "5000"
   HOST: "0.0.0.0"
   NODE_ENV: "production"
-
+  DD_TRACE_AGENT_PORT: "8126"
+  DD_ENV: "production"
+  DD_SERVICE: "fitness-tracker-app"
+  DD_VERSION: "1.0.0"
 
 
     
