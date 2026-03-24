@@ -33,13 +33,11 @@ spec:
         volumeMounts:
         - name: mongodb-data
           mountPath: /data/db
-          readOnly: true
       volumes:
         - name: mongodb-data
-          hostPath: 
-            path: /home/ubuntu/ust
+          hostpath: 
+            path: /home/ubuntu/mongodb-data
             type: DirectoryOrCreate
-
 ---
 apiVersion: v1
 kind: Service
