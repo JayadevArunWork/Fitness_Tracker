@@ -35,7 +35,7 @@ spec:
           mountPath: /data/db
       volumes:
         - name: mongodb-data
-          hostpath: 
+          hostPath: 
             path: /home/ubuntu/mongodb-data
             type: DirectoryOrCreate
 ---
