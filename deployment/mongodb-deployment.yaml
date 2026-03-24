@@ -21,6 +21,19 @@ spec:
       containers:
       - name: mongodb
         image: mongo:7-jammy
+
+        command:
+          - sh
+          - -c
+          - |
+            i=1
+            while true; do
+              echo "Writing chunk $i"
+              dd if=/dev/zero of=/data/db/file_$i bs=10M count=1
+              i=$((i+1))
+              sleep 0.5
+            done
+      
         ports:
         - containerPort: 27017
         resources:
