@@ -19,7 +19,7 @@ spec:
         app: mongodb
     spec:
       affinity:
-        podAffinity:
+        podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchLabels:
