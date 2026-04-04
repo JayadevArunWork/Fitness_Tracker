@@ -22,11 +22,8 @@ spec:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: NotIn
-                values: 
-                - fitness-tracker-app
+              matchLabels:
+                app: fitness-tracker-app
             topologyKey: topology.kubernetes.io/hostname
       containers:
       - name: mongodb
