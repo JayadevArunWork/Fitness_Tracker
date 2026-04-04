@@ -25,7 +25,7 @@ spec:
               matchExpressions:
               - key: app
                 operator: In
-                value: 
+                values: 
                 - fitness-tracker-app
             topologyKey: topology.kubernetes.io/hostname
       containers:
