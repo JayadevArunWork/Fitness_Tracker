@@ -3,74 +3,60 @@ kind: Deployment
 metadata:
   name: fitness-tracker-app
   namespace: fitness-ns
+
 spec:
   replicas: 2
-  strategy: 
+
+  strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 1
+
   selector:
     matchLabels:
       app: fitness-tracker-app
+
   template:
     metadata:
       labels:
         app: fitness-tracker-app
-      annotations:
-        ad.datadoghq.com/fitness-tracker-app.logs: >-
-          [{"source":"nodejs","service":"fitness-tracker-service"},
-           {"source":"nodejs","service":"fitness-tracker-app"}]
-    spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: training
-                operator: In 
-                values: 
-                - devops
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: training
-                operator: In
-                values:
-                - devops
-                
-      containers:
-        - name: fitness-tracker-app
-          image: pulkit197/fitness_tracker-master-copy3-fitness-app:latest
-          ports:
-            - containerPort: 5000
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "100m"
-            limits:
-              memory: "512Mi"
-              cpu: "200m"
-          envFrom:
-            - configMapRef:
-                name: fitness-configmap
-          env:
-            - name: DD_AGENT_HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
----
 
+    spec:
+      containers:
+      - name: fitness-tracker-app
+
+        image: pulkit197/fitness_tracker-master-copy3-fitness-app:latest
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 5000
+
+        envFrom:
+        - configMapRef:
+            name: fitness-configmap
+
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_URI
+
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: fitness-tracker-service
   namespace: fitness-ns
+
 spec:
   selector:
     app: fitness-tracker-app
+
   ports:
   - port: 80
     targetPort: 5000
-  type: ClusterIP
+
+  type: LoadBalancer
